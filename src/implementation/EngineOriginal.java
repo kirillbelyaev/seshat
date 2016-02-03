@@ -134,8 +134,7 @@ public void deleteQueries()
 	this.Queries.clear();
 }		
 	
-	@Override 
-public int initializeEngineWithQuery(String q) 
+private int initializeEngineWithQuery(String q) 
 {       
         this.resetMatch();//02/17/13
         

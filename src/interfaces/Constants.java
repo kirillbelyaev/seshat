@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2010-2014  Kirill Belyaev
+Copyright (c) 2010-2016  Kirill Belyaev
  * kirillbelyaev@yahoo.com
  * kirill@cs.colostate.edu
  * TeleScope-CF-Lib - XML Content Filtering Library
@@ -29,8 +29,7 @@ package interfaces;
 
 public interface Constants 
 {
-	final int DefaultArraySize = 256;
-	final char [] OperatorSet =  {'=', '!', '<', '>', '%', 'e', 'l', 'm'};
-	final char [] LogicSet =  {'|', '&'};
-	
+	final int DefaultArraySize = 1024; /* KB: lets make it really large.. */
+	final char [] OperatorSet =  {'=', '!', '<', '>', '%', 'e', 'l', 'm', '$'}; /* all possible operators for now */
+	final char [] LogicSet =  {'|', '&'};	
 }

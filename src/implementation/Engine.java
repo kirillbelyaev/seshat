@@ -158,8 +158,7 @@ public class Engine implements CEPLib {
 		this.Queries.clear();
 	}
 
-	@Override
-	public int initializeEngineWithQuery(String q) {
+	private int initializeEngineWithQuery(String q) {
 		this.resetMatch();// 02/17/13
 
 		this.clearEngineArrays(); // 05/10/12 clear the exp globals arrays
@@ -286,7 +285,8 @@ public class Engine implements CEPLib {
 	}
 
 	@Override
-	public boolean runQueries(String message) {
+	public boolean runQueries(String message) 
+	{
 		/*
 		 * START : Changes for 1.5 - Variable Substitution.
 		 */
@@ -355,7 +355,7 @@ public class Engine implements CEPLib {
 
 	}
 
-	public String substitute(String tag, String message) {
+	private String substitute(String tag, String message) {
 		tag = tag.replace("$", "").trim();
 		int startPos = message.indexOf(tag) + tag.length() + 1;
 		int endPos = message.indexOf("</" + tag);
@@ -427,8 +427,7 @@ public class Engine implements CEPLib {
 		}
 
 		for (i = 0; i < numberOfExpressions; i++)// loop through defined
-													// tags/attributes of the
-													// expression
+// tags/attributes of the expression
 		{
 			val = tree.getValueOfElementWithName(nl, this.elements[i]);
 
@@ -682,6 +681,8 @@ public class Engine implements CEPLib {
 	 * number support. Changes for 1.3 - Different Data/Time support.
 	 */
 
+	/* KB: just some supplementary routines...  */
+	
 	public void printTupleArray() {
 		System.out.println("Printing tuple array:");
 		for (int i = 0; i < this.tuple.length; i++) {

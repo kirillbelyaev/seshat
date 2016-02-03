@@ -31,8 +31,6 @@ public interface CEPLib extends CEPBase
 {
 	public int getMatchingMessagesCount();
 	
-	public int initializeEngineWithQuery(String q);
-	
 	public boolean runQuery (String message);
 	
 	public boolean runQueries (String message);
