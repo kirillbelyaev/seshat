@@ -22,20 +22,20 @@ Winter's Tale, Act 3, Scene 1. William Shakespeare
 
 package implementation;
 
-import interfaces.CEPLib;
 import static interfaces.Constants.*;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 import org.w3c.dom.NodeList;
+import interfaces.CFE_Lib;
 
 /**
  *
  * @author I829920
  */
 
-public class EngineOriginal implements CEPLib 
+public class EngineOriginal implements CFE_Lib 
 {
 	//parsing engine globals
 	private int [] truth;

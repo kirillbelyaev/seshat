@@ -29,7 +29,6 @@ import static interfaces.Constants.OperatorSet;
 */
 
 import static interfaces.Constants.*;
-import interfaces.CEPLib;
 
 import java.io.ByteArrayInputStream;
 import java.text.ParseException;
@@ -43,19 +42,16 @@ import java.util.regex.Pattern;
 import org.w3c.dom.NodeList;
 
 import utilities.DateUtils;
+import interfaces.CFE_Lib;
 
 /**
  *
  * @author I829920
  */
 
-public class Engine implements CEPLib {
-	// parsing engine globals
-	private int[] truth;
-	private char[] plogic;
-	private char[][] expg;
-
-	// arrays for holding parsed cmd search expressions
+public class Engine implements CFE_Lib 
+{
+	// arrays for holding parsed filtering query expressions
 	private char tuple[][];
 	private char logic[];
 	private char[][] elements;
@@ -66,31 +62,22 @@ public class Engine implements CEPLib {
 	private String Query = null;
 	private ArrayList<String> Queries = null;
 
-	// parsing engine globals
-	private boolean g_and = true;
-	private boolean g_or;
-	private boolean complex = false;
-	private int exp_gn;
-
 	private XMLTree tree = new XMLTree();
 	private ByteArrayInputStream bais = null;
 
 	private static ArrayList<String> replace = new ArrayList<String>();
 	private static ArrayList<String> removeList = new ArrayList<String>();
 
-	public Engine() {
+	public Engine() 
+	{
 		if (this.setUpEngineArrays() != 0)
 			return;
 		if (tree.setUpDOM() != 0)
 			return;
-		// System.out.println("EngineState initialized.");
 	}
 
-	private int setUpEngineArrays() {
-		truth = new int[DefaultArraySize];
-		plogic = new char[DefaultArraySize];
-		expg = new char[DefaultArraySize][DefaultArraySize];
-
+	private int setUpEngineArrays() 
+	{
 		tuple = new char[DefaultArraySize][DefaultArraySize];
 		logic = new char[DefaultArraySize];
 		elements = new char[DefaultArraySize][DefaultArraySize];
@@ -102,14 +89,9 @@ public class Engine implements CEPLib {
 		return 0;
 	}
 
-	private void clearEngineArrays() {
+	private void clearEngineArrays() 
+	{	
 		int i = 0;
-
-		Arrays.fill(truth, 0);
-		Arrays.fill(plogic, '\0');
-
-		for (i = 0; i < expg.length; i++)
-			Arrays.fill(expg[i], '\0');
 
 		Arrays.fill(operators, '\0');
 		Arrays.fill(logic, '\0');
@@ -158,7 +140,8 @@ public class Engine implements CEPLib {
 		this.Queries.clear();
 	}
 
-	private int initializeEngineWithQuery(String q) {
+	private int initializeEngineWithQuery(String q) 
+	{
 		this.resetMatch();// 02/17/13
 
 		this.clearEngineArrays(); // 05/10/12 clear the exp globals arrays
@@ -169,23 +152,15 @@ public class Engine implements CEPLib {
 		Query = q;
 		Query = Query.trim();
 
-		// case: if exp contains ()
-		// fill the expg global arrays with data
-		if (Query.indexOf("(") != -1 && Query.indexOf(")") != -1) {
-			complex = true;
-		} else {// 05/09/12 reset to false
-			complex = false;
-		}
-
-		// terminate immediately if any of () parentheses are found - we now use
-		// query decomposition
-		// that eliminates the need for () construct
-		if (Query.indexOf("(") != -1 || Query.indexOf(")") != -1)
+		/* terminate immediately if any of () parentheses are found -
+		- we now use query decomposition that eliminates the need
+		for () construct */
+		if (Query.contains("(") || Query.contains(")"))
 			return -1;
 
-		if (complex == false)
-			if (this.fillEngineArrays(Query) != 0)
-				return -1;
+		
+		if (this.fillEngineArrays(Query) != 0)
+			return -1;
 
 		return 0;
 	}
@@ -285,12 +260,12 @@ public class Engine implements CEPLib {
 	}
 
 	@Override
-	public boolean runQueries(String message) 
+	public boolean runQueries(String xml_message) 
 	{
 		/*
 		 * START : Changes for 1.5 - Variable Substitution.
 		 */
-		if (message == null || message.isEmpty())
+		if (xml_message == null || xml_message.isEmpty())
 			return false;
 		int situation;
 		if (replace.size() > 0) {
@@ -302,7 +277,7 @@ public class Engine implements CEPLib {
 				else
 					situation = 0;
 
-				temp_query = replaceAndGetQuery(temp_query, message, situation);
+				temp_query = replaceAndGetQuery(temp_query, xml_message, situation);
 
 				this.addQuery(temp_query);
 				this.removeList.add(temp_query);
@@ -314,7 +289,7 @@ public class Engine implements CEPLib {
 
 		for (int i = 0; i < this.Queries.size(); i++)
 			if (this.initializeEngineWithQuery(this.Queries.get(i)) == 0) {
-				if (this.runQuery(message) == true) {
+				if (this.runQuery(xml_message) == true) {
 					return true;
 				}
 			} else
@@ -368,15 +343,16 @@ public class Engine implements CEPLib {
 	 * END : Changes for 1.5 - Variable Substitution.
 	 */
 
-	// generic preferred method to run cep query on xml message string
+	// general preferred method to run content filtering query on xml_message string
 	@Override
-	public boolean runQuery(String message) {
-		if (this.Query == null || this.Query.isEmpty() || message == null
-				|| message.isEmpty())
+	public boolean runQuery(String xml_message) 
+	{
+		if (this.Query == null || this.Query.isEmpty() || xml_message == null
+				|| xml_message.isEmpty())
 			return false;
 
 		byte[] buffer = null;
-		buffer = message.getBytes();
+		buffer = xml_message.getBytes();
 		bais = new ByteArrayInputStream(buffer);
 
 		if (bais == null)

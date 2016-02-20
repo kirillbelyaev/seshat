@@ -26,7 +26,7 @@ package interfaces;
  *
  * @author I829920
  */
-public interface CEPBase 
+public interface CFE_Base 
 {
 	;
 }

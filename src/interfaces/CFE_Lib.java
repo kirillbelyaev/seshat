@@ -27,13 +27,13 @@ package interfaces;
  * @author I829920
  */
 
-public interface CEPLib extends CEPBase 
+public interface CFE_Lib extends CFE_Base 
 {
 	public int getMatchingMessagesCount();
 	
-	public boolean runQuery (String message);
+	public boolean runQuery (String xml_message);
 	
-	public boolean runQueries (String message);
+	public boolean runQueries (String xml_message);
 	
 	public int addQuery(String q);
 	
